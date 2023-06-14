@@ -1,14 +1,12 @@
 package com.ShoppingCart.ProductService.controller;
 
 import com.ShoppingCart.ProductService.model.ProductRequest;
+import com.ShoppingCart.ProductService.model.ProductResponse;
 import com.ShoppingCart.ProductService.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product")
@@ -16,8 +14,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @PostMapping
-    public ResponseEntity<Long> addProduct(@RequestBody ProductRequest productRequest){
-        long productId = productService.addProduct(productRequest);
-        return new ResponseEntity<Long>(productId, HttpStatus.CREATED);
+    public ResponseEntity<String> addProduct(@RequestBody ProductRequest productRequest){
+        productService.addProduct(productRequest);
+        return new ResponseEntity<String>("Product Created Successfully...", HttpStatus.CREATED);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable long id){
+        ProductResponse productResponse =
+                productService.getProductById(id);
+        return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
     }
 }
